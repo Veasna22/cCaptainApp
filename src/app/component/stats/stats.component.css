@@ -1,0 +1,82 @@
+.rounded {
+    -webkit-border-radius: 3px !important;
+    -moz-border-radius: 3px !important;
+    border-radius: 3px !important;
+  }
+  
+  .mini-stat {
+    padding: 15px;
+    margin-bottom: 20px;
+  }
+  
+  .mini-stat-icon {
+    width: 60px;
+    height: 60px;
+    display: inline-block;
+    line-height: 60px;
+    text-align: center;
+    font-size: 30px;
+    background: none repeat scroll 0% 0% #EEE;
+    border-radius: 100%;
+    float: left;
+    margin-right: 10px;
+    color: #FFF;
+  }
+  
+  .mini-stat-info {
+    font-size: 12px;
+    padding-top: 2px;
+  }
+  
+  span, p {
+    color: white;
+  }
+  
+  .mini-stat-info span {
+    display: block;
+    font-size: 30px;
+    font-weight: 600;
+    margin-bottom: 5px;
+    margin-top: 7px;
+  }
+  
+  /* ================ colors =====================*/
+  .bg-facebook {
+    background-color: #285a71 !important;
+    border: 1px solid #3b5998;
+    color: white;
+  }
+  
+  .fg-facebook {
+    color: #3b5998 !important;
+  }
+  
+  .bg-twitter {
+    background-color: #04994e !important;
+    border: 1px solid #04994e;
+    color: white;
+  }
+  
+  .fg-twitter {
+    color: #00a0d1 !important;
+  }
+  
+  .bg-googleplus {
+    background-color: #81830b !important;
+    border: 1px solid #81830b;
+    color: white;
+  }
+  
+  .fg-googleplus {
+    color: #db4a39 !important;
+  }
+  
+  .bg-bitbucket {
+    background-color: #6218b0 !important;
+    border: 1px solid #6218b0;
+    color: white;
+  }
+  
+  .fg-bitbucket {
+    color: #4f096a !important;
+  }  
