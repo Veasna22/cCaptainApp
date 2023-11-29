@@ -1,19 +1,20 @@
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpClientModule } from '@angular/common/http'; 
 
+import { FormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { LoginComponent } from './component/login/login.component';
-import { RegisterComponent } from './component/register/register.component';
-import { VerifyComponent } from './component/verify/verify.component';
-import { ResetpasswordComponent } from './component/resetpassword/resetpassword.component';
-import { FormsModule } from '@angular/forms';
-import { ProfileComponent } from './component/profile/profile.component';
-import { HomeComponent } from './component/home/home.component';
 import { CustomersComponent } from './component/customers/customers.component';
+import { HomeComponent } from './component/home/home.component';
+import { LoginComponent } from './component/login/login.component';
 import { NavbarComponent } from './component/navbar/navbar.component';
+import { ProfileComponent } from './component/profile/profile.component';
+import { RegisterComponent } from './component/register/register.component';
+import { ResetpasswordComponent } from './component/resetpassword/resetpassword.component';
 import { StatsComponent } from './component/stats/stats.component';
+import { VerifyComponent } from './component/verify/verify.component';
+import { TokenInterceptor } from './interceptor/token.interceptor';
 
 @NgModule({
   declarations: [
@@ -34,7 +35,7 @@ import { StatsComponent } from './component/stats/stats.component';
     HttpClientModule,
     FormsModule
   ],
-  providers: [],
+  providers: [{provide : HTTP_INTERCEPTORS, useClass: TokenInterceptor , multi : true}],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
