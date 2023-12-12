@@ -52,6 +52,15 @@ export class UserService {
         tap(console.log),
         catchError(this.handleError)
       );
+    updateRole$ = (roleName : string) => <Observable<CustomHttpResponse<Profile>>>
+    this.http.patch<CustomHttpResponse<Profile>>
+      (`${this.server}/user/update/role/${roleName}`,{})
+      .pipe(
+        tap(console.log),
+        catchError(this.handleError)
+      );
+      
+      
       
     refreshToken$ = () =>
       <Observable<CustomHttpResponse<Profile>>>(
