@@ -20,7 +20,7 @@
                          <span style="position: relative">
                             <img [src]="state?.appData?.data?.user?.imageUrl" alt="state?.appData?.data?.user?.lastName" class="shadow" />
                             <!-- <img src="https://img.freepik.com/free-icon/user_318-159711.jpg" alt="Veasna" class="shadow" /> -->
-                         <i class="bi bi-camera-fill right-position"></i>
+                         <i (click)="fileInput.click()" class="bi bi-camera-fill right-position"></i>
                          </span>
                       </div>
                       <h4 class="text-center">{{ state?.appData?.data?.user?.firstName }} {{ state?.appData?.data?.user?.lastName }}</h4>
@@ -289,6 +289,6 @@
  
  <!-- profile image change form -->
  <form enctype="multipart/form-data" style="display:none;">
-    <input type="file" name="image" id="image"
+    <input type="file" #fileInput (change) ="updatePicture($event.target.files[0])" name="image" id="image"
        placeholder="file" ngModel accept="image/*" />
  </form>
