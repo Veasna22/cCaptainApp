@@ -134,4 +134,32 @@ export class ProfileComponent implements OnInit {
       }
     
   }
+ 
+  updateAccountSettings(settingsForm: NgForm): void {
+    this.isLoadingSubject.next(true);
+    this.profileState$ = this.userService.updateAccountSettings$(settingsForm.value).pipe(
+      map(response => {
+        console.log(response);
+        this.dataSubject.next({ ...response , data: response.data });
+        this.isLoadingSubject.next(false);
+        return {
+          dataState: DataState.LOADED,
+          appData: this.dataSubject.value
+        };
+      }),
+      startWith({
+        dataState: DataState.LOADED,
+        appData: this.dataSubject.value
+      }),
+      catchError((error: string) => {
+        this.isLoadingSubject.next(false);
+        return of({
+          dataState: DataState.LOADED,
+          appData: this.dataSubject.value,
+          error
+        })
+      })
+      )
+    
+  }
 }
