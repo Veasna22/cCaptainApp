@@ -215,13 +215,14 @@
                              <div class="row align-items-center">
                                  <div class="col">
                                      <strong class="mb-2">Multi-Factor Authentication</strong>
-                                     <span class="badge bg-success mx-3">Enabled</span>
-                                     <span class="badge bg-warning mx-3">Disabled</span>
+                                     <span *ngIf="state?.appData?.data?.user?.isUsingMfa" class="badge bg-success mx-3">Enabled</span>
+                                     <span *ngIf="state?.appData?.data?.user?.isUsingMfa" class="badge bg-warning mx-3">Disabled</span>
                                      <p class="text-muted mb-0">Set up Multi-factor Authentication (MFA) help keep your account more secure</p>
                                  </div>
                                  <div class="col-auto">
-                                     <button class="btn btn-primary btn-sm">
-                                       <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="margin-right: 5px;"></span>
+                                     <button (click) = "toggleMfa() " [disabled]="state?.appData?.data?.user?.roleName === 'ROLE_USER' || (isLoading$ | async)" class="btn btn-primary btn-sm">
+                                      {{ state?.appData?.data?.user?.isUsingMfa ? 'Disable' : 'Enable' }}
+                                       <span *ngIf="(isLoading$ | async)" class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="margin-right: 5px;"></span>
                                      </button>
                                  </div>
                              </div>
