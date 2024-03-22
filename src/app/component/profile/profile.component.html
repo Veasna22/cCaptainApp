@@ -1,6 +1,6 @@
 <ng-container *ngIf="(profileState$ | async ) as state" >
     <ng-container>
-       <app-navbar ></app-navbar>
+       <app-navbar [user] = "state?.appData?.data?.user"></app-navbar>
        <!-- <div>{{ state | json }} </div> -->
        <section>
           <div class="container">
@@ -155,7 +155,7 @@
                          <div class="col-md-6">
                             <div class="form-group">
                                  <label style="margin-bottom: 5px;">Role Permissions</label>
-                                 <input type="text" *ngFor ="let permission of state?.appData?.data?.user?.permissions.split(',')" 
+                                 <input type="text" *ngFor ="let permission of state?.appData?.data?.user?.permissions.split(',')"
                                  [value] = "permission" [disabled] = "true"
                                  class="form-control" style="margin-bottom: 5px;">
                             </div>
@@ -235,7 +235,8 @@
                                   </div>
                                   <div class="col-auto">
                                       <div class="custom-control custom-switch">
-                                          <input type="checkbox" class="custom-control-input" id="activityLog">
+                                          <input type="checkbox" (change) = "toggleLogs()" [disabled]="(isLoading$ | async)"
+                                          [checked]="(showLogs$ | async)" class="custom-control-input" id="activityLog">
                                           <span class="custom-control-label"></span>
                                       </div>
                                   </div>
@@ -245,7 +246,7 @@
                    </div>
                 </div>
              </div>
-             <div class="row">
+             <div  class="row">
                 <div class="col-xl-12 mt-4">
                    <div class="card" style="border-radius: 8px;">
                       <div class="card-body">
@@ -263,15 +264,24 @@
                                </tr>
                             </thead>
                             <tbody>
-                               <tr>
-                                  <td>Chrome</td>
-                                  <td>192.168.201.1</td>
-                                  <td>23-11-2023 20:35:00</td>
+                               <tr *ngFor = "let event of state?.appData?.data?.events">
+                                  <td>{{event.device}}</td>
+                                  <td>{{event.ipAddress}}</td>
+                                  <td>{{event.createdAt | date: 'MMMM d, y, h:mm a'}}</td>
                                   <td>
-                                    <span class="badge pill bg-success" >LOGIN_ATTEMPT_SUCESS</span>
-                                     
+                                    <span class="badge pill" [ngClass]="[
+                                      event.type === EventType.LOGIN_ATTEMPT_SUCCESS ? 'bg-success' : '',
+                                      event.type === EventType.LOGIN_ATTEMPT_FAILURE ? 'bg-danger' : '',
+                                      event.type === EventType.LOGIN_ATTEMPT ? 'bg-warning' : '',
+                                      event.type === EventType.PROFILE_PICTURE_UPDATE ? 'bg-primary' : '',
+                                      event.type === EventType.PASSWORD_UPDATE ? 'bg-warning' : '',
+                                      event.type === EventType.MFA_UPDATE ? 'bg-info' : '',
+                                      event.type === EventType.ACCOUNT_SETTINGS_UPDATE ? 'bg-warning' : '',
+                                      event.type === EventType.PROFILE_UPDATE ? 'bg-primary' : '',
+                                      event.type === EventType.ROLE_UPDATE ? 'bg-info' : '',
+                                    ]"> {{ event.type }} </span>
                                   </td>
-                                  <td>You logged in Successfully</td>
+                                  <td>{{event.description}}</td>
                                   <td>
                                      <button type="button" class="btn btn-sm" style="background-color: #fd5d0d; font-weight: 450;">Report</button>
                                   </td>
@@ -286,7 +296,7 @@
        </section>
     </ng-container>
  </ng-container>
- 
+
  <!-- profile image change form -->
  <form enctype="multipart/form-data" style="display:none;">
     <input type="file" #fileInput (change) ="updatePicture($event.target.files[0])" name="image" id="image"

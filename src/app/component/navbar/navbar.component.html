@@ -50,7 +50,7 @@
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownProfile">
                         <li><a class="dropdown-item" [routerLink]="['/profile']"><i
                                     class="bi bi-person-circle"></i> EA VEASNA</a></li>
-                        <li style="cursor: pointer;"><a class="dropdown-item"><i
+                        <li style="cursor: pointer;"><a class="dropdown-item" (click)="logout()"><i
                                     class="bi bi-box-arrow-in-right"></i> Logout</a></li>
                     </ul>
                 </li>

@@ -5,6 +5,7 @@ import { DataState } from 'src/app/enum/datastate.enum';
 import { CustomHttpResponse, Profile } from 'src/app/interface/appstates';
 import { State } from 'src/app/interface/state';
 import { UserService } from 'src/app/service/user.service';
+import { EventType } from './../../enum/event-type.enum';
 
 @Component({
   selector: 'app-profile',
@@ -16,7 +17,11 @@ export class ProfileComponent implements OnInit {
   private dataSubject = new BehaviorSubject<CustomHttpResponse<Profile>>(null);
   private isLoadingSubject = new BehaviorSubject<boolean>(false);
   isLoading$ = this.isLoadingSubject.asObservable();
+  private showLogsSubject = new BehaviorSubject<boolean>(false);
+  showLogs$ = this.isLoadingSubject.asObservable();
   readonly DataState = DataState;
+  readonly EventType = EventType;
+
 
   constructor(private userService: UserService) {}
 
@@ -44,7 +49,7 @@ export class ProfileComponent implements OnInit {
       })
     );
   }
-  
+
   updateProfile(profileForm: NgForm): void {
     this.isLoadingSubject.next(true);
     this.profileState$ = this.userService.update$(profileForm.value).pipe(
@@ -70,7 +75,7 @@ export class ProfileComponent implements OnInit {
         })
       })
       )
-    
+
   }
 
   updateRole(roleForm: NgForm): void {
@@ -98,7 +103,7 @@ export class ProfileComponent implements OnInit {
         })
       })
       )
-    
+
   }
 
   updatePassword(passwordForm: NgForm): void {
@@ -107,6 +112,7 @@ export class ProfileComponent implements OnInit {
       this.profileState$ = this.userService.updatePassword$(passwordForm.value).pipe(
         map(response => {
           console.log(response);
+          this.dataSubject.next({ ...response , data: response.data });
           passwordForm.reset();
           this.isLoadingSubject.next(false);
           return {
@@ -132,9 +138,9 @@ export class ProfileComponent implements OnInit {
         passwordForm.reset();
         this.isLoadingSubject.next(false);
       }
-    
+
   }
- 
+
   updateAccountSettings(settingsForm: NgForm): void {
     this.isLoadingSubject.next(true);
     this.profileState$ = this.userService.updateAccountSettings$(settingsForm.value).pipe(
@@ -160,7 +166,7 @@ export class ProfileComponent implements OnInit {
         })
       })
       )
-    
+
   }
 
   toggleMfa(): void {
@@ -188,7 +194,7 @@ export class ProfileComponent implements OnInit {
         })
       })
       )
-    
+
   }
 
   updatePicture(image : File): void {
@@ -220,7 +226,7 @@ export class ProfileComponent implements OnInit {
         })
         )
     }
-    
+
   }
   private getFormData(image: File) : FormData {
     const formData = new FormData();

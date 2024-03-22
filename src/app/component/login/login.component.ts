@@ -1,25 +1,28 @@
-import { Observable, BehaviorSubject, of } from 'rxjs';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
-import { UserService } from 'src/app/service/user.service';
-import { Key } from 'src/app/enum/key.enum';
-import { DataState } from 'src/app/enum/datastate.enum';
-import { LoginState } from 'src/app/interface/appstates';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 import { catchError, map, startWith } from 'rxjs/operators';
+import { DataState } from 'src/app/enum/datastate.enum';
+import { Key } from 'src/app/enum/key.enum';
+import { LoginState } from 'src/app/interface/appstates';
+import { UserService } from 'src/app/service/user.service';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit{
   loginState$: Observable<LoginState> = of({ dataState: DataState.LOADED });
   private phoneSubject = new BehaviorSubject<string | null>(null);
   private emailSubject = new BehaviorSubject<string | null>(null);
   readonly DataState = DataState;
 
   constructor(private router: Router, private userService: UserService) {}
+  ngOnInit(): void {
+    this.userService.isAuthenticated() ? this.router.navigate(['/']) : this.router.navigate(['/login'])
+  }
 
   login(loginForm: NgForm): void {
     this.loginState$ = this.userService
@@ -65,7 +68,7 @@ export class LoginComponent {
       );
   }
 
- 
+
   verifyCode(verifyCodeForm: NgForm): void {
     this.loginState$ = this.userService.verifyCode$(this.emailSubject.value, verifyCodeForm.value.code)
       .pipe(
