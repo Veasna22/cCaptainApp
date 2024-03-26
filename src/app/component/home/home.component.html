@@ -1,7 +1,7 @@
-<ng-container>
+<ng-container *ngIf="(homeState$ | async ) as state">
     <ng-container>
-       <app-navbar></app-navbar>
-       <app-stats></app-stats> 
+       <app-navbar [user] = "state?.appData?.data?.user"></app-navbar>
+       <app-stats></app-stats>
        <section>
           <div class="container">
              <div class="row mt-3">
@@ -30,38 +30,45 @@
                           </tr>
                       </thead>
                       <tbody class="table-body">
-                          <tr class="cell-1">
-                            <th class="text-center">1</th>
+                          <tr *ngFor="let customer of state?.appData?.data?.page.content" class="cell-1">
+                            <th class="text-center">{{customer.id}}</th>
                             <td><img src="https://img.freepik.com/free-icon/user_318-159711.jpg" width="42" height="42" class="rounded-circle" ></td>
-                            <td>Veasna</td>
-                            <td>Veasna@gmail.com</td>                          
-                            <td>123355677</td>
+                            <td>{{customer.name}}</td>
+                            <td>{{customer.email}}</td>
+                            <td>{{customer.phone}}</td>
                             <td>
-                               <span class="badge bg-info">
-                                ACTIVE
+                               <span class="badge bg-info"
+                                [ngClass]="[
+                                            customer.status === 'ACTIVE' ? 'bg-success' : '',
+                                            customer.status === 'PENDING' ? 'bg-primary':'',
+                                            customer.status === 'BANNED' ? 'bg-danger':'',
+                                            customer.status === 'INACTIVE' ? 'bg-danger':'',
+                              ]"
+                               >
+                                {{customer.status}}
                                </span>
                             </td>
-                            <td>INDIVIDUAL</td>
+                            <td>{{customer.type}}</td>
                             <td>
-                               <button type="button" class="btn btn-info">View</button>
+                               <button type="button" (click)="selectCustomer(customer)" class="btn btn-info">View</button>
                                <!-- <button type="button" (click)="selectCustomer(customer)" class="btn btn-info">View</button> -->
                             </td>
                          </tr>
                       </tbody>
                   </table>
-                  
-                   <nav aria-label="Page navigation example">
+
+                   <nav *ngIf="state?.appData?.data?.page.content.length > 0" aria-label="Page navigation example">
                       <ul class="pagination justify-content-end">
-                         <li class="page-item pointer">
-                            <a class="page-link">&laquo; Prev</a>
+                         <li [ngClass]="0 ==(currentPage$ | async) ? ' disable' : '' " class="page-item pointer">
+                            <a (click) ="goToNextOrPreviousPage('backward')" class="page-link">&laquo; Prev</a>
                          </li>
-                         <li class="page-item pointer">
-                            <a class="page-link">
-                              1
+                         <li *ngFor="let pageNumber of [].constructor(state?.appData?.data?.page.totalPages); let i = index ;" class="page-item pointer">
+                            <a (click) = "goToPage(i)" [ngClass] = "i == (currentPage$ | async) ? ' active' : '' " class="page-link">
+                              {{i+1}}
                             </a>
                          </li>
-                         <li class="page-item pointer">
-                            <a  class="page-link">Next &raquo;</a>
+                         <li [ngClass]="(state?.appData?.data?.page.totalPages -1 ) == (currentPage$ | async) ? ' disable' : '' " class="page-item pointer">
+                            <a (click) ="goToNextOrPreviousPage('forward')" class="page-link">Next &raquo;</a>
                          </li>
                       </ul>
                    </nav>
